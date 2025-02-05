@@ -1,0 +1,11 @@
+users:
+  - name: Mongodb
+    password: $MONGO_USER_PASSWORD
+
+databases:
+  - name: ZeroDowntime
+
+acl:
+  - database: ZeroDowntime
+    user: Mongodb
+    access: dbOwner
