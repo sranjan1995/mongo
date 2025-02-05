@@ -1,7 +1,7 @@
 app:
   name: mongo
   code: MONGO
-  notify: 
+  notify: srswain@ecloudcontrol.com
 
 build:
   version: 5.0
