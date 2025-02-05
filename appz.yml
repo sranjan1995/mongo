@@ -1,0 +1,60 @@
+app:
+  name: mongo
+  code: MONGO
+  notify: 
+
+build:
+  version: 5.0
+  env: DEV
+  build_file: none
+  output_files: output/*.zip
+  image_template: mongo-5.0
+  
+deploy:
+  context: sranjan1995/DEV
+  resources:  mongo-dev
+  type: statefulset
+  replicas: 3
+  port:
+  - 27017
+  - 9216
+
+volumes:
+- claim: mongo-data
+  mount: /appz/data
+  name: mongo-data
+  size: 5Gi
+  mode: ReadWriteOnce
+  matchLabels: false
+  
+- claim: mongo-keys
+  mount: /appz/keys
+  name: mongo-keys
+  size: 1Gi
+  mode: ReadWriteOnce
+  matchLabels: false
+  
+- claim: mongo-backup
+  mount: /appz/backup
+  name: mongo-backup
+  size: 10Gi
+  mode: ReadWriteOnce
+  matchLabels: false
+  
+properties:
+  DB_USER_ADMIN: admin
+  DB_USER_ADMIN_PASSWORD: 
+    vault: DB_USER_ADMIN_PASSWORD
+  MONGO_USER_PASSWORD: 
+    vault: MONGO_USER_PASSWORD
+  AUTH_KEY: 
+    vault: AUTH_KEY
+  REPLICATION: 3
+  
+  MONGODB_HOST: 127.0.0.1
+  MONGODB_PORT: 27017
+  MONGO_BACKUP_DAYS: 7
+  MONGO_BACKUP_TIME: 10
+
+  MASTER_ENABLE: 'yes'
+  revision : 0
