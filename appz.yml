@@ -1,23 +1,21 @@
 app:
-  name: mongo
-  code: MONGO
+  name: MongoDB
+  code: MONGODB
   notify: srswain@ecloudcontrol.com
 
 build:
-  version: 5.0
+  version: 6.0
   env: DEV
   build_file: none
   output_files: output/*.zip
-  image_template: mongo-5.0
+  image_template: mongo-6.0
   
 deploy:
   context: sranjan1995/DEV
-  resources:  mongo-dev
   type: statefulset
-  replicas: 3
+  replicas: 1
   port:
   - 27017
-  - 9216
 
 volumes:
 - claim: mongo-data
@@ -25,36 +23,22 @@ volumes:
   name: mongo-data
   size: 5Gi
   mode: ReadWriteOnce
-  matchLabels: false
-  
-- claim: mongo-keys
+- claim: mongo-key
   mount: /appz/keys
-  name: mongo-keys
-  size: 1Gi
-  mode: ReadWriteOnce
-  matchLabels: false
-  
-- claim: mongo-backup
-  mount: /appz/backup
-  name: mongo-backup
-  size: 10Gi
-  mode: ReadWriteOnce
-  matchLabels: false
+  name: key
+  size: 5Gi 
   
 properties:
-  DB_USER_ADMIN: admin
-  DB_USER_ADMIN_PASSWORD: 
-    vault: DB_USER_ADMIN_PASSWORD
-  MONGO_USER_PASSWORD: 
-    vault: MONGO_USER_PASSWORD
+  revision : 2
+  AUTH_ENABLE : 0
+  DB_USER_ADMIN : appz
+  DB_USER_ADMIN_PASSWORD : 
+    vault : DB_USER_ADMIN_PASSWORD
+  MONGODB_HOST : 127.0.0.1
+  MONGODB_PORT : 27017
+  MASTER_ENABLE : no
+  REPLICATION: 0
   AUTH_KEY: 
     vault: AUTH_KEY
-  REPLICATION: 3
-  
-  MONGODB_HOST: 127.0.0.1
-  MONGODB_PORT: 27017
-  MONGO_BACKUP_DAYS: 7
-  MONGO_BACKUP_TIME: 10
-
-  MASTER_ENABLE: 'yes'
-  revision : 1
+  ENCRYPTION_KEY:
+    vault: ENCRYPTION_KEY
